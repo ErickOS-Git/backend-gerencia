@@ -25,4 +25,7 @@ public class TipoPagamento {
 
     @Column
     Integer taxa;
+    
+    @Column
+    String banco;
 }
