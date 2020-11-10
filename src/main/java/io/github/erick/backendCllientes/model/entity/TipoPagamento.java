@@ -1,6 +1,6 @@
 package io.github.erick.backendCllientes.model.entity;
 
-import javafx.util.converter.PercentageStringConverter;
+
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,7 +25,7 @@ public class TipoPagamento {
 
     @Column
     Integer taxa;
-    
+
     @Column
     String banco;
 }
