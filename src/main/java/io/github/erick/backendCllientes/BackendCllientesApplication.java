@@ -25,6 +25,8 @@ public class BackendCllientesApplication {
 			@Override
 			public void run(String... args) throws Exception {
 				if (usuarioRepository.findById(1).isPresent()){
+
+				}else {
 					Usuario usuario = new Usuario();
 					usuario.setUsername("Erick");
 					usuario.setNomeCompleto("Erick Oliveira Santos");
