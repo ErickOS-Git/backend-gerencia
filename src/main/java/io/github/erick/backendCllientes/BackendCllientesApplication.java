@@ -24,13 +24,16 @@ public class BackendCllientesApplication {
 		return new CommandLineRunner() {
 			@Override
 			public void run(String... args) throws Exception {
-				Usuario usuario = new Usuario();
-				usuario.setUsername("Erick");
-				usuario.setNomeCompleto("Erick Oliveira Santos");
-				usuario.setPassword("admin");
-				usuario.setCpf("06130716540");
-				usuario.setDataNascimento(LocalDate.now());
-				usuarioRepository.save(usuario);
+				if (usuarioRepository.findById(1).isPresent()){
+					Usuario usuario = new Usuario();
+					usuario.setUsername("Erick");
+					usuario.setNomeCompleto("Erick Oliveira Santos");
+					usuario.setPassword("admin");
+					usuario.setCpf("06130716540");
+					usuario.setDataNascimento(LocalDate.now());
+					usuarioRepository.save(usuario);
+				}
+
 			}
 		};
 	}
