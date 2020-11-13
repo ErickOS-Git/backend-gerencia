@@ -11,6 +11,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.time.LocalDate;
+
 @SpringBootApplication
 public class BackendCllientesApplication {
 
@@ -26,6 +28,8 @@ public class BackendCllientesApplication {
 				usuario.setUsername("Erick");
 				usuario.setNomeCompleto("Erick Oliveira Santos");
 				usuario.setPassword("admin");
+				usuario.setCpf("06130716540");
+				usuario.setDataNascimento(LocalDate.now());
 				usuarioRepository.save(usuario);
 			}
 		};
