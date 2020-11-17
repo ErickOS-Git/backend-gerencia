@@ -2,8 +2,10 @@ package io.github.erick.backendCllientes;
 
 
 import io.github.erick.backendCllientes.model.entity.Cliente;
+import io.github.erick.backendCllientes.model.entity.Empresa;
 import io.github.erick.backendCllientes.model.entity.Usuario;
 import io.github.erick.backendCllientes.model.repository.ClienteRepository;
+import io.github.erick.backendCllientes.model.repository.EmpresaRepository;
 import io.github.erick.backendCllientes.model.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -18,6 +20,8 @@ public class BackendCllientesApplication {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	@Autowired
+	private EmpresaRepository empresaRepository;
 
 	@Bean
 	public CommandLineRunner init(){
@@ -36,6 +40,15 @@ public class BackendCllientesApplication {
 					usuarioRepository.save(usuario);
 				}
 
+				if (empresaRepository.findById(1).isPresent()){
+
+				}else {
+					Empresa empresa = new Empresa();
+					empresa.setRazaoSocial("Empresa");
+					empresa.setNomeFantasia("Empresa");
+					empresa.setCnpj("29851562000120");
+					empresaRepository.save(empresa);
+				}
 			}
 		};
 	}
