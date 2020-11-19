@@ -26,7 +26,6 @@ public class ProdutoDTO {
     @NotNull(message = "{campo.valor.obrigatorio}")
     private BigDecimal valorVenda;
 
-    @NotNull(message = "{campo.valor.obrigatorio}")
     private BigDecimal valorCompra;
 
 }

@@ -68,4 +68,6 @@ public class Empresa {
 
     @Column
     private String email;
+
+
 }

@@ -25,6 +25,7 @@ public class ClienteService {
 
     public Cliente salvar(Cliente cliente){
         cliente.setCpf(replaceString.repalceCPF(cliente.getCpf()));
+        cliente.setRg(replaceString.replaceRg(cliente.getRg()));
         cliente.setTelefone(replaceString.replaceTelefone(cliente.getTelefone()));
         cliente.setCelular(replaceString.replaceCelular(cliente.getCelular()));
         boolean exists = repository.existsByCpf(cliente.getCpf());
@@ -64,6 +65,7 @@ public class ClienteService {
                     .map(cliente -> {
                         if (cliente.getId().equals(id)){
                             clienteAtualizado.setId(id);
+                            clienteAtualizado.setRg(replaceString.replaceRg(clienteAtualizado.getRg()));
                             clienteAtualizado.setTelefone(replaceString.replaceTelefone(clienteAtualizado.getTelefone()));
                             clienteAtualizado.setCelular(replaceString.replaceCelular(clienteAtualizado.getCelular()));
                             repository.save(clienteAtualizado);

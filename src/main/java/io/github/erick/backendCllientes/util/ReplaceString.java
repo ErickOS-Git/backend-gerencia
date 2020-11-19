@@ -13,6 +13,16 @@ public class ReplaceString {
         value = value.replace(".","").replace(",",".");
         return new BigDecimal(value);
     }
+
+    public String replaceRg(String rg){
+        if (rg == null) {
+
+            return null;
+        }
+        rg =  rg.replace(".","").replace("-","");
+        return rg;
+    }
+
     public String repalceCPF(String cpf){
         if(cpf == null){
             return null;
