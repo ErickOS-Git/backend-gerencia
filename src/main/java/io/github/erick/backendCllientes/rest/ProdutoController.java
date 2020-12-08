@@ -33,6 +33,15 @@ public class ProdutoController {
         }
     }
 
+    @GetMapping("/carregar-produtos")
+    public List<Produto> carregarProdutos(){
+        try {
+            return service.carregarProdutos();
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não foi possivel carregar os produtos");
+        }
+    }
+
     @GetMapping
     public Page<Produto> list
             (@RequestParam(value = "page", defaultValue = "0") Integer pagina,
@@ -45,7 +54,7 @@ public class ProdutoController {
         }
     }
 
-    @GetMapping("/buscarProduto")
+    @GetMapping("/buscar-produto")
     public Page<Produto> list
             (@RequestParam("filtro") String filtro,
              @RequestParam(value = "page", defaultValue = "0") Integer pagina,

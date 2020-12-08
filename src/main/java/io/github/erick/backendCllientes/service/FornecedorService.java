@@ -9,6 +9,7 @@ import io.github.erick.backendCllientes.util.ReplaceString;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -123,14 +124,14 @@ public class FornecedorService {
 
     public Page<Fornecedor> listaTodos(Integer pagina, Integer tamanhoPagina) {
 
-        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina);
+        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina,Sort.by("dataCadastro").descending());
         return  repository.findAll(pageRequest);
     }
 
     public Page<Fornecedor> buscarFornecedor(Integer pagina, Integer tamanhoPagina, String filtro
 
     ){
-        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina);
+        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina, Sort.by("dataCadastro").descending());
         return  repository.buscarFornecedor(filtro,pageRequest);
     }
 }

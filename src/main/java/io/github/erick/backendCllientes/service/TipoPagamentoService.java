@@ -31,7 +31,7 @@ public class TipoPagamentoService {
                     repository.save(tipoPagamentoAtualizado);
                     return Void.TYPE;
                 } )
-                .orElseThrow(() -> new TipoPagamentoException("Forma de pagamento Inexistente", ""));
+                .orElseThrow(() -> new TipoPagamentoException("Forma de pagamento inexistente", ""));
     }
     public void delete(Integer id){
         repository.findById(id)
@@ -39,7 +39,7 @@ public class TipoPagamentoService {
                     repository.delete(tipoPagamento);
                     return Void.TYPE;
                 })
-                .orElseThrow(() -> new TipoPagamentoException("Forma de pagamento Inexistente", ""));
+                .orElseThrow(() -> new TipoPagamentoException("Forma de pagamento inexistente", ""));
     }
 
     public Page<TipoPagamento> lista(Integer pagina, Integer tamanhoPagina){

@@ -12,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Set;
 
 
 @Entity
@@ -91,6 +92,7 @@ public class Cliente  {
 
     @Column
     private String numero2;
+
 
     @PrePersist
     public void prePersist(){

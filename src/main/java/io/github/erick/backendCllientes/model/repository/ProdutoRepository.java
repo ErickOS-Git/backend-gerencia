@@ -13,4 +13,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
     @Query("SELECT p FROM Produto p " +
             "WHERE (p.nomeProduto) LIKE %:filtro%" )
     Page<Produto> buscarProduto(@Param("filtro") String filtro, Pageable pageable);
+
+    boolean existsById (Integer id);
+
 }

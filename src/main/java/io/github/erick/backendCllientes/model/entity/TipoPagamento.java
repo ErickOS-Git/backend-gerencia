@@ -15,14 +15,14 @@ public class TipoPagamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+   private Integer id;
 
     @Column(name = "tipo_pagamento")
-    String tipoPagamento;
+    private String tipoPagamento;
 
     @Column
-    String descricao;
+    private String descricao;
 
     @Column
-    Integer taxa;
+    private Integer taxa;
 }

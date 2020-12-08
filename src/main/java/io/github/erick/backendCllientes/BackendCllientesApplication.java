@@ -44,9 +44,14 @@ public class BackendCllientesApplication {
 
 				}else {
 					Empresa empresa = new Empresa();
-					empresa.setRazaoSocial("Empresa");
-					empresa.setNomeFantasia("Empresa");
+					empresa.setRazaoSocial("Gerenciamento de Sistemas Rafael e Erick ME");
+					empresa.setNomeFantasia("GerenciaRE");
 					empresa.setCnpj("29851562000120");
+					empresa.setInscricaoEstadual("015242121");
+					empresa.setInscricaoMunicipal("011245444");
+					empresa.setAreaAtuacao("Sistema de Gestão");
+					empresa.setTelefone("7133265888");
+					empresa.setCelular("71997585887");
 					empresaRepository.save(empresa);
 				}
 			}

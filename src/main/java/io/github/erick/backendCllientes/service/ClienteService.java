@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ClienteService {
 
-    @Autowired
+
     private ClienteRepository repository;
 
     private ReplaceString replaceString;
@@ -46,14 +47,16 @@ public class ClienteService {
     public Page<Cliente> buscarCliente(Integer pagina, Integer tamanhoPagina, String filtro
 
     ){
-        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina);
+        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina, Sort.by("dataCadastro").descending());
         return  repository.buscarCliente(filtro,pageRequest);
     }
 
     public Page<Cliente> listarTodos(Integer pagina, Integer tamanhoPagina
 
     ){
-        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina);
+
+      //  PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina);
+        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina,Sort.by("dataCadastro").descending());
         return  repository.findAll(pageRequest);
     }
 
@@ -90,7 +93,9 @@ public class ClienteService {
         }
     }
 
-
+    public List<Cliente> carregarClientes(){
+        return repository.findAll(Sort.by("nome").ascending());
+    }
 
     public void deleteCliente(Integer id){
         repository

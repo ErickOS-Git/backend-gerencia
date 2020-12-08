@@ -12,6 +12,7 @@ import io.github.erick.backendCllientes.util.ReplaceString;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,7 +26,6 @@ public class ProdutoService {
     private final ProdutoRepository produtoRepository;
     private final TipoProdutoRepository tipoProdutoRepository;
     private final CategoriaProdutoRepository categoriaProdutoRepository;
-    private final ReplaceString replaceString;
 
 
     public Produto salvarProduto(ProdutoDTO produtoDTO){
@@ -74,12 +74,16 @@ public class ProdutoService {
     }
 
     public Page<Produto> listaProduto(Integer pagina, Integer tamanhoPagina){
-        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina);
+        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina, Sort.by("nomProduto").ascending());
         return produtoRepository.findAll(pageRequest);
     }
     public Page<Produto> buscarProduto(Integer pagina, Integer tamanhoPagina, String filtro){
-        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina);
+        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina, Sort.by("nomProduto").ascending());
         return produtoRepository.buscarProduto(filtro, pageRequest);
+    }
+
+    public List<Produto> carregarProdutos(){
+        return produtoRepository.findAll();
     }
 
     /* ---------CATEGORIA PRODUTO------------------- */
@@ -114,12 +118,12 @@ public class ProdutoService {
     }
 
     public Page<CategoriaProduto> listaCategoriaProduto(Integer pagina, Integer tamanhoPagina){
-        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina);
+        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina, Sort.by("dataCadastro").descending());
         return categoriaProdutoRepository.findAll(pageRequest);
     }
 
     public Page<CategoriaProduto> buscarCategoriaProduto(String filtro, Integer pagina, Integer tamanhoPagina){
-        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina);
+        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina, Sort.by("dataCadastro").descending());
         return categoriaProdutoRepository.buscarCategoriaProduto(filtro, pageRequest);
     }
 
@@ -155,12 +159,12 @@ public class ProdutoService {
     }
 
     public Page<TipoProduto> listaTipoProduto(Integer pagina, Integer tamanhoPagina){
-        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina);
+        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina, Sort.by("dataCadastro").descending());
         return tipoProdutoRepository.findAll(pageRequest);
     }
 
     public Page<TipoProduto> buscarTipoProduto(String filtro, Integer pagina, Integer tamanhoPagina){
-        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina);
+        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina, Sort.by("dataCadastro").descending());
         return tipoProdutoRepository.buscartipoProduto(filtro, pageRequest);
     }
 }

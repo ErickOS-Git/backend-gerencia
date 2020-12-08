@@ -42,7 +42,7 @@ public class ClienteController {
     public Cliente findByCPF(@PathVariable String cpf){
         return service
                 .buscarCpf(cpf)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Paciente não Encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Paciente não encontrado"));
     }
 
     @GetMapping
@@ -54,7 +54,7 @@ public class ClienteController {
             return service.listarTodos(pagina, tamanhoPagina);
     }
 
-    @GetMapping("/buscarCliente")
+    @GetMapping("/buscar-cliente")
     public Page<Cliente> buscarNomeOuCpf(
             @RequestParam("filtro") String filtro,
             @RequestParam(value = "page", defaultValue = "0") Integer pagina,
@@ -72,7 +72,7 @@ public class ClienteController {
 
         return service
                 .buscarId(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Paciente não Encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Paciente não encontrado"));
     }
 
     @DeleteMapping("{id}")
@@ -93,6 +93,15 @@ public class ClienteController {
        }catch (ClienteException e){
            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
        }
+    }
+
+    @GetMapping("/carregar-cliente")
+    public List<Cliente> carrregarCliente(){
+        try {
+            return service.carregarClientes();
+        }catch (ClienteException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Não foi possivel carregar os clientes");
+        }
     }
 
 }

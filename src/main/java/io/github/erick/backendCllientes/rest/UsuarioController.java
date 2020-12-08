@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -32,6 +33,15 @@ public class UsuarioController  {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
 
+    }
+
+    @GetMapping
+    public List<Usuario> listar(){
+        try {
+            return service.listar();
+        }catch (UsuarioCadastradoException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
 }
