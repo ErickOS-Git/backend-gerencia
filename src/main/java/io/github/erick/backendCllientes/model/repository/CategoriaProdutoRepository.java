@@ -9,6 +9,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface CategoriaProdutoRepository extends JpaRepository<CategoriaProduto, Integer> {
     @Query("SELECT c FROM CategoriaProduto c " +
-            "WHERE (c.NomeCategoriaProduto) LIKE %:filtro%" )
+            "WHERE (c.nomeCategoriaProduto) LIKE %:filtro%" )
     Page<CategoriaProduto> buscarCategoriaProduto(@Param("filtro") String filtro, Pageable pageable);
+
+    @Query("select c" +
+            " from CategoriaProduto c left join c.categoriaProdutoAdicional")
+    Page<CategoriaProduto> listaCategoriaProduto(Pageable pageable);
 }

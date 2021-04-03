@@ -25,10 +25,7 @@ public class LancamentoPagamento {
     private TipoPagamento tipoPagamento;
 
     @Column
-    private Integer desconto;
-
-    @Column
-    private BigDecimal valorpago;
+    private BigDecimal valorPago;
 
     @Column
     private Integer taxa;

@@ -3,6 +3,8 @@ package io.github.erick.backendCllientes.model.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -24,6 +26,7 @@ public class Lancamento {
     private LocalDate dataCadastro;
 
     @Column(name = "data_lancamento")
+    @NotNull(message = "{campo.dataLancamento.obrigatorio}")
     private LocalDate dataLancamento;
 
     @ManyToOne
@@ -54,15 +57,23 @@ public class Lancamento {
     @Column
     private BigDecimal total;
 
-    @OneToMany(mappedBy = "lancamento")
-    private Set<LancamentoPagamento> lancamentoPagamentos;
+    @Column
+    private String status;
 
-    @OneToMany(mappedBy = "lancamento")
-    private List<LancamentoProduto> lancamentoProdutos;
+  // @OneToMany(mappedBy = "lancamento")
+  // private List<LancamentoPagamento> lancamentoPagamentos;
+  //
+  // @OneToMany(mappedBy = "lancamento")
+  // private List<LancamentoProduto> lancamentoProdutos;
+
 
     @PrePersist
     public void prePersist(){
         setDataCadastro(LocalDate.now());
+        setStatus("Pedido em aberto");
     }
+
+
+
 
 }

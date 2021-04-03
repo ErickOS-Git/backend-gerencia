@@ -1,13 +1,10 @@
 package io.github.erick.backendCllientes.service;
 
+import io.github.erick.backendCllientes.exception.GenericException;
 import io.github.erick.backendCllientes.exception.ProdutoException;
-import io.github.erick.backendCllientes.model.entity.CategoriaProduto;
-import io.github.erick.backendCllientes.model.entity.Produto;
-import io.github.erick.backendCllientes.model.entity.TipoProduto;
-import io.github.erick.backendCllientes.model.repository.CategoriaProdutoRepository;
-import io.github.erick.backendCllientes.model.repository.ProdutoRepository;
-import io.github.erick.backendCllientes.model.repository.TipoProdutoRepository;
-import io.github.erick.backendCllientes.rest.dto.ProdutoDTO;
+import io.github.erick.backendCllientes.model.entity.*;
+import io.github.erick.backendCllientes.model.repository.*;
+import io.github.erick.backendCllientes.rest.dto.*;
 import io.github.erick.backendCllientes.util.ReplaceString;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,18 +12,22 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class ProdutoService {
 
     private final ProdutoRepository produtoRepository;
-    private final TipoProdutoRepository tipoProdutoRepository;
     private final CategoriaProdutoRepository categoriaProdutoRepository;
-
+    private final TipoProdutoRepository tipoProdutoRepository;
+    private final CategoriaProdutoService categoriaProdutoService;
 
     public Produto salvarProduto(ProdutoDTO produtoDTO){
 
@@ -74,97 +75,24 @@ public class ProdutoService {
     }
 
     public Page<Produto> listaProduto(Integer pagina, Integer tamanhoPagina){
-        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina, Sort.by("nomProduto").ascending());
+        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina, Sort.by("nomeProduto").ascending());
         return produtoRepository.findAll(pageRequest);
     }
     public Page<Produto> buscarProduto(Integer pagina, Integer tamanhoPagina, String filtro){
-        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina, Sort.by("nomProduto").ascending());
+        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina, Sort.by("nomeProduto").ascending());
         return produtoRepository.buscarProduto(filtro, pageRequest);
     }
 
-    public List<Produto> carregarProdutos(){
-        return produtoRepository.findAll();
-    }
-
-    /* ---------CATEGORIA PRODUTO------------------- */
-
-
-    public CategoriaProduto salvarCategoriaProduto(CategoriaProduto categoriaProduto){
-        return categoriaProdutoRepository.save(categoriaProduto);
-    }
-
-    public void atualizarCategoriaProduto(Integer id, CategoriaProduto categoriaProdutoAtualizado){
-
-        categoriaProdutoRepository.findById(id)
-                .map(categoriaProduto1 -> {
-                    categoriaProduto1.setNomeCategoriaProduto(categoriaProdutoAtualizado.getNomeCategoriaProduto());
-                    categoriaProdutoRepository.save(categoriaProduto1);
-                    return Void.TYPE;
-                })
-                .orElseThrow(() -> new ProdutoException("Categoria inexistente",""));
-    }
-
-    public void deleteCategoriaProduto(Integer id){
-        categoriaProdutoRepository.findById(id)
-                .map(categoriaProduto -> {
-                    categoriaProdutoRepository.delete(categoriaProduto);
-                    return  Void.TYPE;
-                })
-                .orElseThrow(() -> new ProdutoException("Categoria inexistente",""));
-    }
-
-    public List<CategoriaProduto> CarregarCategoriaProduto(){
-        return  categoriaProdutoRepository.findAll();
-    }
-
-    public Page<CategoriaProduto> listaCategoriaProduto(Integer pagina, Integer tamanhoPagina){
-        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina, Sort.by("dataCadastro").descending());
-        return categoriaProdutoRepository.findAll(pageRequest);
-    }
-
-    public Page<CategoriaProduto> buscarCategoriaProduto(String filtro, Integer pagina, Integer tamanhoPagina){
-        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina, Sort.by("dataCadastro").descending());
-        return categoriaProdutoRepository.buscarCategoriaProduto(filtro, pageRequest);
-    }
-
-
-    /* -----------TIPO PRODUTO------------------- */
-
-    public void atualizarTipoProduto(Integer id, TipoProduto tipoProduto){
-
-        tipoProdutoRepository.findById(id)
-                .map(tipoProduto1 -> {
-                    tipoProduto1.setNomeTipoProduto(tipoProduto.getNomeTipoProduto());
-                    tipoProdutoRepository.save(tipoProduto1);
-                    return Void.TYPE;
-                })
-                .orElseThrow(() -> new ProdutoException("Tipo produto inexistente",""));
-    }
-
-    public void deleteTipoProduto(Integer id){
-        tipoProdutoRepository.findById(id)
-                .map(tipoProduto1 -> {
-                    tipoProdutoRepository.delete(tipoProduto1);
-                    return  Void.TYPE;
-                })
-                .orElseThrow(() -> new ProdutoException("Categoria inexistente",""));
-    }
-
-    public TipoProduto salvarTipoProduto(TipoProduto tipoProduto){
-        return tipoProdutoRepository.save(tipoProduto);
-    }
-
-    public List<TipoProduto> carregarTipoProduto(){
-        return  tipoProdutoRepository.findAll();
-    }
-
-    public Page<TipoProduto> listaTipoProduto(Integer pagina, Integer tamanhoPagina){
-        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina, Sort.by("dataCadastro").descending());
-        return tipoProdutoRepository.findAll(pageRequest);
-    }
-
-    public Page<TipoProduto> buscarTipoProduto(String filtro, Integer pagina, Integer tamanhoPagina){
-        PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina, Sort.by("dataCadastro").descending());
-        return tipoProdutoRepository.buscartipoProduto(filtro, pageRequest);
+    public List<InforProduto> carregarProdutos(){
+        List<Produto> produtos = produtoRepository.findAll();
+      return produtos.stream().map(produto ->
+            InforProduto.builder()
+                    .id(produto.getId())
+                    .nomeProduto(produto.getNomeProduto())
+                    .valorCompra(produto.getValorCompra())
+                    .valorVenda(produto.getValorVenda())
+                    .categoriaProduto(categoriaProdutoService.converterInfoCatProdDTO(produto.getCategoriaProduto()))
+                    .build()
+        ).collect(Collectors.toList());
     }
 }

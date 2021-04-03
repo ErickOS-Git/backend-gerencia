@@ -44,7 +44,6 @@ public class Cliente  {
 
     @Column(name = "data_nascimento")
     @NotNull(message = "{campo.dataNascimento.obrigatorio}")
-    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataNascimento;
 
     @Column(updatable = false, name = "data_cadastro")
@@ -92,6 +91,7 @@ public class Cliente  {
 
     @Column
     private String numero2;
+
 
 
     @PrePersist

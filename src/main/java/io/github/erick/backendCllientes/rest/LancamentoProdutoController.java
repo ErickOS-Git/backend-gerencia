@@ -1,8 +1,12 @@
 package io.github.erick.backendCllientes.rest;
 
-import io.github.erick.backendCllientes.model.entity.Lancamento;
-import io.github.erick.backendCllientes.rest.dto.InformacoesLancamentoDTO;
-import io.github.erick.backendCllientes.rest.dto.LancamentoDTO;
+
+import io.github.erick.backendCllientes.model.entity.LancamentoProduto;
+import io.github.erick.backendCllientes.rest.dto.InfoLanProdutoDTO;
+import io.github.erick.backendCllientes.rest.dto.InfoLanProdutosDTO;
+import io.github.erick.backendCllientes.rest.dto.LancProdArrayDto;
+import io.github.erick.backendCllientes.rest.dto.LancamentoProdutosDTO;
+import io.github.erick.backendCllientes.service.LancamentoProdutoService;
 import io.github.erick.backendCllientes.service.LancamentoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,30 +14,20 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/lancamentos")
+@RequestMapping("/api/lancamentos-produtos")
 @AllArgsConstructor
-public class LancamentoController {
+public class LancamentoProdutoController {
 
-
-    private final LancamentoService service;
+    private final LancamentoProdutoService service;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Lancamento salvar(@RequestBody @Validated LancamentoDTO lancamentoDTO ){
+    public List<InfoLanProdutoDTO> salvar(@RequestBody @Validated LancProdArrayDto prodArrayDto ){
         try {
-            return  service.salvar(lancamentoDTO);
-
-        }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
-    };
-
-    @PutMapping("{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateLancamento(@PathVariable Integer id, @RequestBody @Validated LancamentoDTO lancamentoDTOAtualizado){
-        try{
-            service.updateLancamento(id, lancamentoDTOAtualizado);
+            return service.salvar(prodArrayDto);
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
@@ -48,7 +42,4 @@ public class LancamentoController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
-
-
-
 }

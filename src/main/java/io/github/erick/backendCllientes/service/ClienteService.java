@@ -19,9 +19,9 @@ import java.util.Optional;
 public class ClienteService {
 
 
-    private ClienteRepository repository;
+    private final ClienteRepository repository;
 
-    private ReplaceString replaceString;
+    private final ReplaceString replaceString;
 
 
     public Cliente salvar(Cliente cliente){

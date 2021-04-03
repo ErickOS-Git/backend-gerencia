@@ -1,21 +1,23 @@
 package io.github.erick.backendCllientes.rest.dto;
 
-import io.github.erick.backendCllientes.model.entity.Lancamento;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-@Data
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class LancamentoProdutosDTO {
 
+    private Integer id;
     private Integer produto;
-    private BigDecimal valor_venda;
+    private BigDecimal valorVenda;
     private BigDecimal desconto;
+    private BigDecimal totalProduto;
     private Integer quantidade;
-
+    private List<LancamentoAdicionalDTO> adicionais;
 
 }

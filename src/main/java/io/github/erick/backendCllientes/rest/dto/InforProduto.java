@@ -11,11 +11,11 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class InfoLanProdutosDTO {
+public class InforProduto {
 
+    private Integer id;
     private String nomeProduto;
+    private BigDecimal valorCompra;
     private BigDecimal valorVenda;
-    private BigDecimal desconto;
-    private Integer quantidade;
-
+    private InfoCatProdDTO categoriaProduto;
 }

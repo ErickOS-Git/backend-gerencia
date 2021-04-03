@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 public class InformacoesLancamentoDTO {
 
-    private Integer codigoLancamento;
+    private Integer id;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataCadastro;
@@ -27,6 +27,8 @@ public class InformacoesLancamentoDTO {
     private String cpf;
 
     private String cep;
+
+    private String email;
 
     private String bairro;
 

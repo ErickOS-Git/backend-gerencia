@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.github.erick.backendCllientes.model.entity.LancamentoPagamento;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -19,13 +20,14 @@ public class LancamentoDTO {
     private LocalDate dataCadastro;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "{campo.dataLancamento.obrigatorio}")
     private LocalDate dataLancamento;
 
     private Integer cliente;
 
-    private List<LancamentoProdutosDTO> produtos;
+   // private List<LancamentoProdutosDTO> produtos;
 
-    private List<LancamentoPagamentoDTO> tipoPagamentos;
+   // private List<LancamentoPagamentoDTO> tipoPagamentos;
 
     private String cep;
 
@@ -40,6 +42,8 @@ public class LancamentoDTO {
     private String telefone;
 
     private String celular;
+
+    private String status;
 
     private BigDecimal total;
 }

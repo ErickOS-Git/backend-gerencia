@@ -1,24 +1,18 @@
 package io.github.erick.backendCllientes.service;
 
 import io.github.erick.backendCllientes.exception.ClienteException;
+import io.github.erick.backendCllientes.exception.FornecedorException;
 import io.github.erick.backendCllientes.exception.GenericException;
+import io.github.erick.backendCllientes.exception.ProdutoException;
 import io.github.erick.backendCllientes.model.entity.*;
 import io.github.erick.backendCllientes.model.repository.*;
-import io.github.erick.backendCllientes.rest.dto.InfoLanProdutosDTO;
-import io.github.erick.backendCllientes.rest.dto.InformacoesLancamentoDTO;
-import io.github.erick.backendCllientes.rest.dto.LancamentoDTO;
-import io.github.erick.backendCllientes.rest.dto.LancamentoProdutosDTO;
+import io.github.erick.backendCllientes.rest.dto.*;
 import lombok.AllArgsConstructor;
-import org.jboss.jandex.VoidType;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,18 +20,17 @@ import java.util.stream.Collectors;
 public class LancamentoService {
 
     private final LancamentoRepository repository;
-    private final LancamentoProdutoRepository lancamentoProdutoRepository;
     private final ClienteRepository clienteRepository;
     private final ProdutoRepository produtoRepository;
 
-    //Responsável por salvar os Lancamentos e a forma de pagamento e os produtos!
+
+    //Responsável por salvar o Lancamento
     @Transactional
-    public InformacoesLancamentoDTO salvar(LancamentoDTO lancamentoDTO) {
+    public Lancamento salvar(LancamentoDTO lancamentoDTO) {
         Integer clienteId = lancamentoDTO.getCliente();
         Cliente cliente = clienteRepository
                 .findById(clienteId)
                 .orElseThrow(() -> new ClienteException("Cliente não encontrado", ""));
-
 
         Lancamento lancamento = new Lancamento();
         lancamento.setCliente(cliente);
@@ -49,86 +42,93 @@ public class LancamentoService {
         lancamento.setNumero(lancamentoDTO.getNumero());
         lancamento.setCelular(lancamentoDTO.getCelular());
         lancamento.setTelefone(lancamentoDTO.getTelefone());
+        lancamento.setStatus(lancamentoDTO.getStatus());
         lancamento.setTotal(lancamentoDTO.getTotal());
-try {
-    repository.save(lancamento);
-}catch (Exception e){
-    throw new GenericException("Dados do pedido inválidos", e.toString());
-}
 
-        List<LancamentoProduto> lancamentoProduto = converterProdutos(lancamento, lancamentoDTO.getProdutos());
-
-try {
-    lancamentoProdutoRepository.saveAll(lancamentoProduto);
-}catch (Exception e){
-    throw new GenericException("Dados do pedido inválidos", e.toString());
-}
-
-        lancamento.setLancamentoProdutos(lancamentoProduto);
-        InformacoesLancamentoDTO informacoesLancamentoDTO = new InformacoesLancamentoDTO();
-
-        return informacoesLancamentoDTO = converter(lancamento);
-    }
-
-    //Converter os produtos que vem do lancamentoDTO em uma lista de produtos
-    private List<LancamentoProduto> converterProdutos(Lancamento lancamento, List<LancamentoProdutosDTO> listProdutos) {
-
-            if(listProdutos.isEmpty()) {
-                throw new GenericException("Informe pelo menos um produto","");
-            }
+        try {
+            repository.save(lancamento);
+        } catch (Exception e) {
+            throw new GenericException("Dados do pedido inválidos", e.toString());
+        }
+        //   List<LancamentoProduto> lancamentoProduto = converterProdutos(lancamento, lancamentoDTO.getProdutos());
 
 
-
-        return listProdutos.stream()
-                .map(dto -> {
-                    if (dto.getProduto() == null){
-                        throw new GenericException("Informe pelo menos um produto","");
-                    }
-                    Integer idProduto = dto.getProduto();
-
-                    Produto produto = produtoRepository
-                            .findById(idProduto)
-                            .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produto selecionado não existe"));
-                    LancamentoProduto lancamentoProduto = new LancamentoProduto();
-                    lancamentoProduto.setLancamento(lancamento);
-                    lancamentoProduto.setDesconto(dto.getDesconto());
-                    lancamentoProduto.setQuantidade(dto.getQuantidade());
-                    lancamentoProduto.setValorVenda(dto.getValor_venda());
-                    lancamentoProduto.setProduto(produto);
-                    return lancamentoProduto;
-                }).collect(Collectors.toList());
-    }
-
+        //
+        // try {
+        //     lancamentoProdutoRepository.saveAll(lancamentoProduto);
+        // } catch (Exception e) {
+        //     throw new GenericException("Dados do pedido inválidos", e.toString());
+        // }
+        //
+        // prepAdiconal(lancamento, lancamentoProduto);
+        //
+        //
+        // lancamento.setLancamentoProdutos(lancamentoProduto);
+        return lancamento;
+        //InformacoesLancamentoDTO informacoesLancamentoDTO = new InformacoesLancamentoDTO();
+        //return informacoesLancamentoDTO = converter(lancamento);
+    }  ;
 
     //Transformar os dados salvos para exibir ao usuario
     private InformacoesLancamentoDTO converter(Lancamento lancamento){
-       return InformacoesLancamentoDTO.builder()
-                .codigoLancamento(lancamento.getId())
+        return InformacoesLancamentoDTO.builder()
+                .id(lancamento.getId())
                 .nomeCliente(lancamento.getCliente().getNome())
                 .dataLancamento(lancamento.getDataLancamento())
                 .dataCadastro(lancamento.getDataCadastro())
                 .total(lancamento.getTotal())
-                .produtos(converter(lancamento.getLancamentoProdutos()))
                 .build();
     }
 
     // transforma o LancamentoProdutos em InfoLanProdutosDTO para exibir em InformacoesLancamentoDTO
-    private List<InfoLanProdutosDTO> converter(List<LancamentoProduto> produtos){
+    public List<InfoLanProdutosDTO> converter(List<LancamentoProduto> produtos){
         if (CollectionUtils.isEmpty(produtos)){
             Collections.emptyList();
         }
 
         return produtos.stream().map(
                 produto ->
-
-                    InfoLanProdutosDTO.builder()
-                            .nomeProduto(produto.getProduto().getNomeProduto())
-                            .quantidade(produto.getQuantidade())
-                            .desconto(produto.getDesconto())
-                            .valorVenda(produto.getValorVenda())
-                            .build()
-                ).collect(Collectors.toList());
+                        InfoLanProdutosDTO.builder()
+                                .nomeProduto(produto.getProduto().getNomeProduto())
+                                .quantidade(produto.getQuantidade())
+                                .desconto(produto.getDesconto())
+                                .valorVenda(produto.getValorVenda())
+                                .build()
+        ).collect(Collectors.toList());
 
     }
 
+    public void deleteLancamento(Integer id) {
+        repository.findById(id)
+                .map(lancamento -> {
+                    repository.deleteById(id);
+                    return Void.TYPE;
+                })
+                .orElseThrow(()-> new FornecedorException("Desculpe ocorreu um erro ao apagar o lancamento!",""));
+    }
+
+    public void updateLancamento(Integer id, LancamentoDTO lancamentoAtualizado) {
+        Integer clienteId = lancamentoAtualizado.getCliente();
+        Cliente cliente = clienteRepository
+                .findById(clienteId)
+                .orElseThrow(() -> new ClienteException("Cliente não encontrado", ""));
+
+        repository.findById(id)
+                .map(lancamentoAtual -> {
+                    lancamentoAtual.setCliente(cliente);
+                    lancamentoAtual.setDataLancamento(lancamentoAtualizado.getDataLancamento());
+                    lancamentoAtual.setCep(lancamentoAtualizado.getCep());
+                    lancamentoAtual.setBairro(lancamentoAtualizado.getBairro());
+                    lancamentoAtual.setLagradouro(lancamentoAtualizado.getLagradouro());
+                    lancamentoAtual.setComplemento(lancamentoAtualizado.getComplemento());
+                    lancamentoAtual.setNumero(lancamentoAtualizado.getNumero());
+                    lancamentoAtual.setCelular(lancamentoAtualizado.getCelular());
+                    lancamentoAtual.setTelefone(lancamentoAtualizado.getTelefone());
+                    lancamentoAtual.setStatus(lancamentoAtualizado.getStatus());
+                    lancamentoAtual.setTotal(lancamentoAtualizado.getTotal());
+                    repository.save(lancamentoAtual);
+                    return Void.TYPE;
+                })
+                .orElseThrow(() -> new ProdutoException("Pedido inexistente",""));
+    }
 }

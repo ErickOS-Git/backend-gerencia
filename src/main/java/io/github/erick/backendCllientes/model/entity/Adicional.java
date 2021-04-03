@@ -2,47 +2,40 @@ package io.github.erick.backendCllientes.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.omg.CosNaming.NamingContextPackage.NotEmpty;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Data
-@Getter@Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Produto {
+public class Adicional {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column
+    @NotNull
+    private  String nome;
+
     @Column(updatable = false, name = "data_cadastro")
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataCadastro;
 
-    @Column(name = "nome_produto")
-    private String nomeProduto;
-
-    @Column(name = "valor_compra")
-    private BigDecimal valorCompra;
-
-    @Column(name = "valor_venda")
-    private BigDecimal valorVenda;
-
-    @ManyToOne
-    @JoinColumn ( name = "id_categoria_produto")
-    private CategoriaProduto categoriaProduto;
-
-    @ManyToOne
-    @JoinColumn ( name = "id_tipo_produto")
-    private TipoProduto tipoProduto;
+    @OneToMany(mappedBy = "adicional")
+    private List<LancamentoAdicional> adicionais;
 
 
     @PrePersist
     public void prePersist(){
         setDataCadastro(LocalDate.now());
     }
+
 }
